@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PostHog } from 'posthog-node'
 import { ConfigService } from '@nestjs/config';
-import { CustomLogger } from 'src/common/logger';
+import { CustomLogger } from '../common/logger';
 
 @Injectable()
 export class TelemetryService implements OnModuleInit {

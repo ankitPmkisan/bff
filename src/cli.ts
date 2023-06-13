@@ -67,9 +67,9 @@ async function bootstrap() {
       const jsonData = (await readCSVFile(csvFilePath)) as Array<any>;
       const cdds = [];
       for (const j of jsonData) {
-        console.log(j[""]);
+        console.log(j["index"]);
         let cdd: CreateDocumentDto = {
-          id: parseInt(j[""]) + 10,
+          id: parseInt(j["index"]),
           tags: j["tags"],
           content: j["context"],
         };

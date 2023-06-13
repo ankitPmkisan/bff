@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Headers, Body, UseInterceptors, Param } from "@nestjs/common";
-import { AppService } from "./app.service";
+import { AppService, Prompt } from "./app.service";
 import { AlertInterceptor } from "./modules/alerts/alerts.interceptor";
 import { IsNotEmpty,IsUUID, IsOptional } from 'class-validator';
+import { interpret } from "xstate";
+import { promptMachine } from "./xstate/prompt/prompt.machine";
 
 export class PromptDto {
   @IsNotEmpty()
@@ -41,8 +43,25 @@ export class AppController {
 
   @UseInterceptors(AlertInterceptor)
   @Post("/prompt")
-  prompt(@Body() promptDto: PromptDto, @Headers() headers): any {
-    return this.appService.processPrompt(promptDto);
+  async prompt(@Body() promptDto: PromptDto, @Headers() headers): Promise<any> {
+    let prompt: Prompt = {
+      input: promptDto,
+    };
+    const promptProcessingService = interpret(
+      promptMachine.withContext({
+        prompt
+      })
+    ).start()
+
+    await new Promise((resolve) => {
+      promptProcessingService.onDone((state) => {
+        resolve(state);
+      });
+    });
+    let result = promptProcessingService.getSnapshot().context.prompt
+    // Stop the state machine
+    promptProcessingService.stop();
+    return result;
   }
 
   @Get("/health/:minutes")

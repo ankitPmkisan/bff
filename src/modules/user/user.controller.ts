@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { query } from '@prisma/client';
 import { AuthGuard } from '../../common/auth-gaurd';
 import { ConfigService } from '@nestjs/config';
-import { CustomLogger } from 'src/common/logger';
+import { CustomLogger } from '../../common/logger';
 
 @Controller('user')
 @UseGuards(AuthGuard)

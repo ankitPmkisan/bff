@@ -82,3 +82,46 @@ inputLanguage && inputLanguage == 'en' ? "We are unable to process your request 
 
 export const CONTACT_AMAKRUSHI_HELPLINE = (inputLanguage) => 
 inputLanguage && inputLanguage == 'en' ? "You can contact the Ama Krushi helpline by dialing 155333. They will provide you with information and reply to your queries within 24 hours." : "ଆପଣ 155333 ଡାଏଲ୍ କରି ଆମା କ୍ରୁସି ହେଲ୍ପଲାଇନ ସହିତ ଯୋଗାଯୋଗ କରିପାରିବେ | ସେମାନେ ଆପଣଙ୍କୁ ସୂଚନା ପ୍ରଦାନ କରିବେ ଏବଂ 24 ଘଣ୍ଟା ମଧ୍ୟରେ ଆପଣଙ୍କ ପ୍ରଶ୍ନର ଉତ୍ତର ଦେବେ |"
+
+export const chatGPT3Prompt = (history) => [
+    {
+      role: "user",
+      content: `The user has asked a question:  You are an AI tool that carries out neural coreference
+    for conversations to replace the last message in the conversation with the coreferenced
+    message.
+
+    Rules - Follow these rules forever.
+    1. Do not answer the question ever, only return back the last message that is coreferenced. 
+    2. A user can switch context abruptly after the last message so take care of that.
+    3. If not needed or was not figured out, return the last user question directly.
+    
+    Input:
+      User: How do I protect my crops from pests?
+      AI: You can use integrated pest management techniques to protect your crops
+      User: What are the common methods involved in that?
+      
+    Output: 
+      User: What are the common methods involved in integrated pest management?
+
+    Input:
+      User: Where can I get seeds for rice?,
+      AI: You can get seeds for rice... Bla bla, 
+      User: Where can I get seeds for rice?
+      
+    Output: 
+      User: Where can I get seeds for rice?
+
+    Input:
+      User: Where can I get seeds for rice?,
+      AI: You can get seeds for rice... Bla bla, 
+      User: My paddy has spindle shaped spots with pointed ends. How do I fix it?
+
+    Output:
+      User: My paddy has spindle shaped spots with pointed ends. How do I fix the disease?
+      
+    Input
+      ${history.join("\n")}
+      
+    Output:`,
+    },
+  ];
